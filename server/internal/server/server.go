@@ -20,7 +20,7 @@ type Server struct {
 func NewServer() *Server {
 	return &Server{
 		mux:   http.NewServeMux(),
-		debug: config.Conf.DEBUG,
+		debug: config.Conf.IsDev,
 	}
 }
 

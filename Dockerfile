@@ -43,7 +43,7 @@ FROM scratch AS prod
 
 WORKDIR /app
 
-ENV IS_PROD=true
+ENV IS_DEV=false
 
 EXPOSE 8000
 

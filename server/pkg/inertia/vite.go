@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	dist "github.com/haguirrear/coffeeassistant"
+	"github.com/haguirrear/coffeeassistant/server/internal/server/middleware"
 	"github.com/haguirrear/coffeeassistant/server/pkg/config"
 	"github.com/haguirrear/coffeeassistant/server/pkg/logger"
 )
@@ -103,11 +104,15 @@ func getChunks(manifest viteManifest, chunkNames []string) []ManifestItem {
 }
 
 func FileServer(mux *http.ServeMux) {
-	if config.Conf.IsProd {
-		mux.Handle("/public/", ReplacePrefix("/public", "/dist", http.FileServerFS(dist.DistFS)))
+	if config.Conf.IsDev {
+		publicHandler := middleware.LogMiddleware(http.StripPrefix("/public", http.FileServer(http.Dir("./public"))))
+		frontendHandler := middleware.LogMiddleware(http.StripPrefix("/public/frontend", http.FileServer(http.Dir("./frontend"))))
+		mux.Handle("/public/", publicHandler)
+		mux.Handle("/public/frontend/", frontendHandler)
 	} else {
-		mux.Handle("/public/", http.StripPrefix("/public", http.FileServer(http.Dir("./public"))))
-		mux.Handle("/public/frontend/", http.StripPrefix("/public/frontend", http.FileServer(http.Dir("./frontend"))))
+		handler := middleware.LogMiddleware(ReplacePrefix("/public", "/dist", http.FileServerFS(dist.DistFS)))
+		mux.Handle("/public/", handler)
+
 	}
 
 }

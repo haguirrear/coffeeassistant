@@ -9,26 +9,29 @@
 
 <body>
   <div id="root" data-page="{{ marshal .page }}"></div>
-  {{ if .is_prod }} {{ range .manifest.css }}
-  <link rel="stylesheet" href="/{{ . }}" />
-  {{ end }}
+  {{ if .is_dev }} 
+    <script type="module">
+      import RefreshRuntime from "http://localhost:5173/public/@react-refresh";
+      RefreshRuntime.injectIntoGlobalHook(window);
+      window.$RefreshReg$ = () => { };
+      window.$RefreshSig$ = () => (type) => type;
+      window.__vite_plugin_react_preamble_installed__ = true;
+    </script>
+    <script type="module" src="http://localhost:5173/public/@vite/client"></script>
+    <script type="module" src="http://localhost:5173/public/frontend/src/main.tsx"></script>
+  {{ else }}
+    {{ range .manifest.css }}
+      <link rel="stylesheet" href="/{{ . }}" />
+    {{ end }}
 
-  <script type="module" src="/{{ .manifest.js }}"></script>
+    <script type="module" src="/{{ .manifest.js }}"></script>
 
-  {{ range .manifest.chunk_css }}
-  <link rel="stylesheet" href="/{{ . }}" />
-  {{ end }} {{ range .manifest.chunk_files }}
-  <link rel="modulepreload" href="/{{ . }}" />
-  {{ end }} {{ else }}
-  <script type="module">
-    import RefreshRuntime from "http://localhost:5173/public/@react-refresh";
-    RefreshRuntime.injectIntoGlobalHook(window);
-    window.$RefreshReg$ = () => { };
-    window.$RefreshSig$ = () => (type) => type;
-    window.__vite_plugin_react_preamble_installed__ = true;
-  </script>
-  <script type="module" src="http://localhost:5173/public/@vite/client"></script>
-  <script type="module" src="http://localhost:5173/public/frontend/src/main.tsx"></script>
+    {{ range .manifest.chunk_css }}
+      <link rel="stylesheet" href="/{{ . }}" />
+    {{ end }} 
+    {{ range .manifest.chunk_files }}
+      <link rel="modulepreload" href="/{{ . }}" />
+    {{ end }} 
   {{ end }}
 </body>
 

@@ -13,7 +13,7 @@ const (
 )
 
 type Config struct {
-	IsProd  bool   `env:"IS_PROD"`
+	IsDev   bool   `env:"IS_DEV, default=true"`
 	BaseURL string `env:"BASE_URL"`
 	Version string `env:"VERSION, default=0.1"`
 }

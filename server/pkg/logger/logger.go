@@ -15,7 +15,7 @@ func CreateLogger() zerolog.Logger {
 	zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
 	logger := zerolog.New(os.Stderr).With().Timestamp().Logger()
 
-	if !config.Conf.IsProd {
+	if config.Conf.IsDev {
 		logger = logger.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	}
 

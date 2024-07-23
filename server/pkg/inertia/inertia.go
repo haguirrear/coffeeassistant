@@ -25,10 +25,10 @@ func NewInertiaManager() *inertiago.Inertia {
 
 func Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ctx := Manager.WithViewData(r.Context(), "is_prod", config.Conf.IsProd)
+		ctx := Manager.WithViewData(r.Context(), "is_dev", config.Conf.IsDev)
 		ctx = Manager.WithViewData(ctx, "title", "app")
 
-		if config.Conf.IsProd {
+		if !config.Conf.IsDev {
 			manifest := readManifest()
 			entry := getEntryManifest(manifest, config.InertiaEntry)
 			ctx = Manager.WithViewData(ctx, "manifest", entry)
