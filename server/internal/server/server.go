@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 
+	"github.com/haguirrear/coffeeassistant/server/internal/server/middleware"
 	"github.com/haguirrear/coffeeassistant/server/internal/server/srverr"
 	"github.com/haguirrear/coffeeassistant/server/internal/server/srvwrite"
 	"github.com/haguirrear/coffeeassistant/server/pkg/config"
@@ -19,7 +20,7 @@ type Server struct {
 func NewServer() *Server {
 	return &Server{
 		mux:   http.NewServeMux(),
-		debug: !config.Conf.IsProd,
+		debug: config.Conf.DEBUG,
 	}
 }
 
@@ -48,7 +49,7 @@ func (s *Server) RegisterPage(pattern string, handler http.Handler) {
 }
 
 func (s *Server) globalMiddleware(handler http.Handler) http.Handler {
-	return Use(handler, LogMiddleware, RecoverMiddleware)
+	return Use(handler, middleware.LogMiddleware, middleware.RecoverMiddleware)
 }
 
 func (s *Server) Start(addr string) error {
