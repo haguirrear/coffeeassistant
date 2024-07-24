@@ -4,8 +4,6 @@ import (
 	"net/http"
 
 	"github.com/haguirrear/coffeeassistant/server/internal/server/middleware"
-	"github.com/haguirrear/coffeeassistant/server/internal/server/srverr"
-	"github.com/haguirrear/coffeeassistant/server/internal/server/srvwrite"
 	"github.com/haguirrear/coffeeassistant/server/pkg/config"
 	"github.com/haguirrear/coffeeassistant/server/pkg/inertia"
 	"github.com/haguirrear/coffeeassistant/server/pkg/logger"
@@ -25,11 +23,8 @@ func NewServer() *Server {
 }
 
 func (s *Server) Setup() {
-	s.mux.HandleFunc("/health", func(w http.ResponseWriter, _ *http.Request) {
-		if err := srvwrite.JSON(w, http.StatusOK, map[string]any{"status": "OK"}); err != nil {
-			srverr.HandleErr(w, err)
-		}
-	})
+	s.mux.HandleFunc("/health", healthHandler)
+	s.mux.HandleFunc("/favicon.ico", faviconHandler)
 
 	inertia.FileServer(s.mux)
 	s.Pages()

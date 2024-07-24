@@ -2,6 +2,7 @@ package inertia
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
@@ -140,4 +141,12 @@ func ReplacePrefix(prefix string, replace string, h http.Handler) http.Handler {
 			http.NotFound(w, r)
 		}
 	})
+}
+
+func ServePublicAsset(w http.ResponseWriter, r *http.Request, filename string) {
+	if config.Conf.IsDev {
+		http.ServeFile(w, r, fmt.Sprintf("./public/%s", filename))
+	} else {
+		http.ServeFileFS(w, r, dist.DistFS, fmt.Sprintf("./dist/%s", filename))
+	}
 }
