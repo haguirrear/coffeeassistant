@@ -147,6 +147,6 @@ func ServePublicAsset(w http.ResponseWriter, r *http.Request, filename string) {
 	if config.Conf.IsDev {
 		http.ServeFile(w, r, fmt.Sprintf("./public/%s", filename))
 	} else {
-		http.ServeFileFS(w, r, dist.DistFS, fmt.Sprintf("./dist/%s", filename))
+		http.ServeFileFS(w, r, dist.DistFS, fmt.Sprintf("dist/%s", filename))
 	}
 }

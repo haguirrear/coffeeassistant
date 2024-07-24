@@ -9,7 +9,7 @@ COPY ./bun.lockb ./package.json ./
 RUN bun install
 
 # Copy files
-COPY ./tsconfig.json ./vite.config.ts ./
+COPY ./*.ts ./*.json ./*.js ./
 COPY public ./public
 COPY frontend ./frontend
 

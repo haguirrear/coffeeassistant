@@ -1,4 +1,4 @@
-IMAGE=coffe-assistant
+IMAGE=coffee-assistant
 
 ifneq (,$(wildcard ./.env))
     include .env
@@ -13,6 +13,17 @@ docker-image:
 docker-run:
 	docker run --rm --name $(IMAGE) -p 8000:8000 $(IMAGE)
 
+.PHONY:docker
+docker: docker-image docker-run
+
 .PHONY: dev
 dev:
 	bun run dev & air
+
+.PHONY: dev-server
+dev-server:
+	air
+
+.PHONY: dev-client
+dev-client:
+	bun run dev

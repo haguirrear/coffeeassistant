@@ -24,7 +24,7 @@ func NewServer() *Server {
 
 func (s *Server) Setup() {
 	s.mux.HandleFunc("/health", healthHandler)
-	s.mux.HandleFunc("/favicon.ico", faviconHandler)
+	s.mux.HandleFunc("/favicon.svg", faviconHandler)
 
 	inertia.FileServer(s.mux)
 	s.Pages()
