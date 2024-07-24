@@ -8,10 +8,11 @@ import (
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	if err := inertia.Manager.Render(w, r, "App", nil); err != nil {
+	ctx := inertia.Manager.WithViewData(r.Context(), "title", "Counter")
+	newReq := r.WithContext(ctx)
+	if err := inertia.Manager.Render(w, newReq, "App", nil); err != nil {
 		logger.Logger.Error().Err(err).Msg("")
 	}
-	// srverr.HandleErr(w, err)
 }
 
 func GetController() (string, http.Handler) {
